@@ -9,10 +9,15 @@ struct SimpleLedgerProMaxApp: App {
             LedgerCategory.self,
             LedgerAccount.self
         ])
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: ScreenshotMode.isEnabled)
 
         do {
-            return try ModelContainer(for: schema, configurations: [configuration])
+            let container = try ModelContainer(for: schema, configurations: [configuration])
+            if ScreenshotMode.isEnabled {
+                let context = ModelContext(container)
+                SeedData.ensureScreenshotData(in: context)
+            }
+            return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }

@@ -77,6 +77,7 @@ struct AddTransactionView: View {
             }
             .onAppear {
                 refreshSelections()
+                prepareScreenshotForm()
             }
             .onChange(of: accounts.count) {
                 refreshSelections()
@@ -282,6 +283,18 @@ struct AddTransactionView: View {
 
         let target = accounts.first { $0.name != selectedAccountName } ?? accounts.first
         selectedTargetAccountName = target?.name ?? selectedAccountName
+    }
+
+    private func prepareScreenshotForm() {
+        guard ScreenshotMode.isEnabled, amountText.isEmpty else {
+            return
+        }
+
+        kind = .expense
+        amountText = "36.00"
+        selectedCategoryName = "餐饮"
+        selectedAccountName = accounts.first(where: \.isDefault)?.name ?? accounts.first?.name ?? "微信"
+        note = String(localized: "餐饮")
     }
 
     private func categoryName(for kind: TransactionKind) -> String {
