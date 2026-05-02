@@ -1,0 +1,13 @@
+Livro simples é um app claro para registrar despesas e receitas do dia a dia.
+
+Abra o app, digite o valor, escolha uma categoria e salve. Ele foi feito para quem quer entender para onde o dinheiro vai sem usar ferramentas financeiras complicadas.
+
+Recursos:
+- Registrar despesas, receitas e transferências
+- Ver gastos e saldo do mês
+- Ranking por categoria e gráficos simples
+- Categorias e contas comuns já incluídas
+- Siri e Atalhos para registro por voz
+- Dados locais e interface tranquila
+
+Use para alimentação, transporte, compras, aluguel, assinaturas, salário e renda extra.

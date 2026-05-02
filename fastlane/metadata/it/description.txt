@@ -1,0 +1,13 @@
+Registro spese semplice è un’app chiara per tenere traccia di spese ed entrate quotidiane.
+
+Apri l’app, inserisci l’importo, scegli una categoria e salva. È pensata per chi vuole capire dove va il denaro senza usare strumenti finanziari complessi.
+
+Funzioni:
+- Registra spese, entrate e trasferimenti
+- Vedi spese e saldo del mese
+- Classifiche per categoria e grafici semplici
+- Categorie e conti quotidiani inclusi
+- Supporto a Siri e Comandi Rapidi
+- Dati locali e interfaccia tranquilla
+
+Perfetta per pasti, trasporti, shopping, affitto, abbonamenti, stipendio e lavori extra.

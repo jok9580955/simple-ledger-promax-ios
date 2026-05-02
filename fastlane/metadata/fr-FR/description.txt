@@ -1,0 +1,13 @@
+Carnet simple est un suivi de dépenses clair pour la vie quotidienne.
+
+Ouvrez l’app, saisissez un montant, choisissez une catégorie et l’opération est enregistrée. Elle convient à celles et ceux qui veulent comprendre leurs dépenses sans logiciel financier compliqué.
+
+Fonctions principales :
+- Enregistrer dépenses, revenus et virements
+- Voir les dépenses et le solde du mois
+- Classements par catégorie et graphiques simples
+- Catégories et comptes du quotidien inclus
+- Siri et Raccourcis pour enregistrer à la voix
+- Données locales et interface calme
+
+Repas, transport, achats, loyer, abonnements, salaire ou revenus annexes : gardez une vue claire sur votre argent.

@@ -1,0 +1,13 @@
+Einfaches Kassenbuch ist ein klarer Tracker für tägliche Ausgaben und Einnahmen.
+
+Öffne die App, gib den Betrag ein, wähle eine Kategorie und speichere den Eintrag. Ideal für alle, die ihre Finanzen verstehen möchten, ohne komplizierte Buchhaltungssoftware zu nutzen.
+
+Funktionen:
+- Ausgaben, Einnahmen und Umbuchungen erfassen
+- Monatsausgaben und Saldo im Überblick
+- Kategorienrangliste und einfache Diagramme
+- Kategorien und Konten für den Alltag
+- Siri und Kurzbefehle für Sprachbuchungen
+- Lokale Datenspeicherung und ruhiges Design
+
+Perfekt für Essen, Transport, Einkäufe, Miete, Abos, Gehalt und Nebeneinkünfte.

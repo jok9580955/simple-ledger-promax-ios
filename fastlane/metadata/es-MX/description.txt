@@ -1,0 +1,13 @@
+Libro simple es una app clara para registrar gastos e ingresos diarios.
+
+Abre la app, escribe el importe, elige una categoría y guarda el movimiento. Está pensada para entender tu dinero sin usar software financiero complicado.
+
+Funciones:
+- Registrar gastos, ingresos y transferencias
+- Ver gastos y saldo del mes
+- Ranking por categorías y gráficos sencillos
+- Categorías y cuentas habituales incluidas
+- Siri y Atajos para registrar con la voz
+- Datos locales e interfaz tranquila
+
+Comida, transporte, compras, alquiler, suscripciones, salario o ingresos extra: mantén tus finanzas diarias bajo control.

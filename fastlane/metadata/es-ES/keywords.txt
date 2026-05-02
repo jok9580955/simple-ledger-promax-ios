@@ -1,0 +1,1 @@
+gastos,presupuesto,dinero,finanzas,ingresos,Siri,atajos,cuentas,ahorro,registro

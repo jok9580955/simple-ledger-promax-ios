@@ -1,0 +1,1 @@
+budget,utgifter,pengar,ekonomi,inkomst,Siri,genvägar,konton,spara

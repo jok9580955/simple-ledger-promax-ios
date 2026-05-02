@@ -1,0 +1,13 @@
+Simple Ledger is a clean daily expense tracker for everyday life.
+
+Open the app, enter an amount, choose a category, and you are done. It is designed for people who want complete personal bookkeeping without complicated finance software.
+
+Key features:
+- Quickly record expenses, income, and transfers
+- Clear monthly overview with spending and balance
+- Category rankings and simple charts
+- Built-in daily categories and account types
+- Siri and Shortcuts support for voice bookkeeping
+- Local-first data storage with a calm, Apple-style interface
+
+Use it for meals, transport, shopping, rent, subscriptions, salary, side income, and the little purchases that are easy to forget. Simple Ledger helps you see where money goes while keeping the recording flow light and fast.
