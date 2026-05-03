@@ -31,6 +31,7 @@ locales = Dir.children(screenshots_path).select do |entry|
 end.sort
 
 missing = []
+incomplete = []
 total_sets = 0
 total_screenshots = 0
 
@@ -52,13 +53,23 @@ locales.each do |locale|
   end
 
   sets = localization.get_app_screenshot_sets(includes: "appScreenshots", limit: 50)
+  states = {}
   counts = sets.each_with_object({}) do |set, result|
-    result[set.screenshot_display_type] = Array(set.app_screenshots).length
+    screenshots = Array(set.app_screenshots)
+    result[set.screenshot_display_type] = screenshots.length
+    states[set.screenshot_display_type] = screenshots.each_with_object(Hash.new(0)) do |screenshot, state_counts|
+      state = screenshot.asset_delivery_state&.fetch("state", nil) || "UNKNOWN"
+      state_counts[state] += 1
+      incomplete << "#{locale} #{set.screenshot_display_type} #{screenshot.file_name}: #{state}" unless state == "COMPLETE"
+    end
   end
 
   total_sets += counts.length
   total_screenshots += counts.values.sum
-  summary = counts.sort.map { |display_type, count| "#{display_type}=#{count}" }.join(", ")
+  summary = counts.sort.map do |display_type, count|
+    state_summary = states.fetch(display_type, {}).sort.map { |state, state_count| "#{state}:#{state_count}" }.join("/")
+    "#{display_type}=#{count}(#{state_summary})"
+  end.join(", ")
   puts "#{locale}: #{summary}"
 
   locale_total = counts.values.sum
@@ -68,10 +79,11 @@ end
 puts "Total screenshot sets: #{total_sets}"
 puts "Total screenshots: #{total_screenshots}"
 
-if missing.empty? && total_screenshots == locales.length * 10
+if missing.empty? && incomplete.empty? && total_screenshots == locales.length * 10
   puts "OK: all expected screenshots are present."
 else
-  warn "Missing/incomplete:"
+  warn "Missing/incomplete/not complete:"
   missing.each { |item| warn "- #{item}" }
+  incomplete.each { |item| warn "- #{item}" }
   exit 1
 end
