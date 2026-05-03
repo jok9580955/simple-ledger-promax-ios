@@ -3,6 +3,7 @@ import SwiftUI
 
 struct AddTransactionView: View {
     @Environment(\.modelContext) private var modelContext
+    @AppStorage("monthlyBudget") private var monthlyBudget = 0.0
     @Query(sort: \LedgerCategory.sortIndex) private var categories: [LedgerCategory]
     @Query(sort: \LedgerAccount.sortIndex) private var accounts: [LedgerAccount]
 
@@ -20,11 +21,11 @@ struct AddTransactionView: View {
         categories.filter { $0.kind == kind }
     }
 
-    private var currentMonthTransactions: [LedgerTransaction] {
-        transactionsInCurrentMonth
-    }
-
     @Query(sort: \LedgerTransaction.date, order: .reverse) private var transactionsInCurrentMonth: [LedgerTransaction]
+
+    private var currentMonthTransactions: [LedgerTransaction] {
+        transactionsInCurrentMonth.filter { Calendar.current.isDate($0.date, equalTo: .now, toGranularity: .month) }
+    }
 
     private var monthlyExpense: Double {
         currentMonthTransactions.filter { $0.kind == .expense }.reduce(0) { $0 + $1.amount }
@@ -38,8 +39,19 @@ struct AddTransactionView: View {
         monthlyIncome - monthlyExpense
     }
 
+    private var monthlyRemainingBudget: Double? {
+        guard monthlyBudget > 0 else {
+            return nil
+        }
+
+        return monthlyBudget - monthlyExpense
+    }
+
     private var amount: Double {
-        Double(amountText.replacingOccurrences(of: ",", with: "")) ?? 0
+        let normalized = amountText
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: ",", with: ".")
+        return Double(normalized) ?? 0
     }
 
     var body: some View {
@@ -104,16 +116,16 @@ struct AddTransactionView: View {
                     .font(.system(size: 46, weight: .semibold, design: .rounded))
                 Spacer()
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text("本月结余")
+                    Text(monthlyRemainingBudget == nil ? "本月结余" : "预算剩余")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                    Text("¥\(monthlyBalance, specifier: "%.2f")")
+                    Text("¥\((monthlyRemainingBudget ?? monthlyBalance), specifier: "%.2f")")
                         .font(.headline)
-                        .foregroundStyle(monthlyBalance >= 0 ? .green : .red)
+                        .foregroundStyle((monthlyRemainingBudget ?? monthlyBalance) >= 0 ? .green : .red)
                 }
             }
 
-            ProgressView(value: monthlyIncome > 0 ? min(monthlyExpense / monthlyIncome, 1) : 0)
+            ProgressView(value: progressValue)
                 .tint(.blue)
         }
         .padding(20)
@@ -249,6 +261,14 @@ struct AddTransactionView: View {
         }
 
         return !selectedCategoryName.isEmpty
+    }
+
+    private var progressValue: Double {
+        if monthlyBudget > 0 {
+            return min(monthlyExpense / monthlyBudget, 1)
+        }
+
+        return monthlyIncome > 0 ? min(monthlyExpense / monthlyIncome, 1) : 0
     }
 
     private func saveTransaction() {
