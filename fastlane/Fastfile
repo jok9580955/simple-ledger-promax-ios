@@ -1,0 +1,85 @@
+default_platform(:ios)
+
+APP_IDENTIFIER = "com.daniao.simpleledgerpromax"
+DEFAULT_ASC_API_KEY_ID = "JD5G4LG5XN"
+DEFAULT_ASC_API_ISSUER_ID = "f68594d0-23a9-480d-8f1d-6c84b40bf664"
+DEFAULT_ASC_API_KEYFILEPATH = "/Users/ll/Desktop/AuthKey_JD5G4LG5XN.p8"
+PROJECT_ROOT = File.expand_path("..", __dir__)
+METADATA_PATH = File.join(PROJECT_ROOT, "fastlane", "metadata")
+SCREENSHOTS_PATH = File.join(PROJECT_ROOT, "fastlane", "screenshots")
+
+def app_store_connect_api_key_from_env
+  key_id = ENV.fetch("APP_STORE_CONNECT_API_KEY_ID", DEFAULT_ASC_API_KEY_ID)
+  issuer_id = ENV.fetch("APP_STORE_CONNECT_API_KEY_ISSUER_ID", DEFAULT_ASC_API_ISSUER_ID)
+  key_filepath = File.expand_path(ENV.fetch("APP_STORE_CONNECT_API_KEY_KEYFILEPATH", DEFAULT_ASC_API_KEYFILEPATH))
+
+  if [key_id, issuer_id, key_filepath].any? { |value| value.to_s.strip.empty? } || !File.exist?(key_filepath)
+    UI.user_error!("Missing App Store Connect API key config. Set APP_STORE_CONNECT_API_KEY_ID, APP_STORE_CONNECT_API_KEY_ISSUER_ID, APP_STORE_CONNECT_API_KEY_KEYFILEPATH or place #{DEFAULT_ASC_API_KEYFILEPATH}.")
+  end
+
+  app_store_connect_api_key(
+    key_id: key_id,
+    issuer_id: issuer_id,
+    key_filepath: key_filepath,
+    duration: 1200,
+    in_house: false
+  )
+end
+
+def app_review_information_from_env
+  required_keys = %w[
+    APP_REVIEW_FIRST_NAME
+    APP_REVIEW_LAST_NAME
+    APP_REVIEW_PHONE
+    APP_REVIEW_EMAIL
+  ]
+  return nil unless required_keys.all? { |key| ENV[key].to_s.strip.length.positive? }
+
+  {
+    first_name: ENV.fetch("APP_REVIEW_FIRST_NAME"),
+    last_name: ENV.fetch("APP_REVIEW_LAST_NAME"),
+    phone_number: ENV.fetch("APP_REVIEW_PHONE"),
+    email_address: ENV.fetch("APP_REVIEW_EMAIL"),
+    notes: ENV.fetch("APP_REVIEW_NOTES", "This app does not require login. No demo account is required.")
+  }
+end
+
+platform :ios do
+  desc "Upload App Store metadata only, without screenshots, binary, or review submission"
+  lane :upmeta do
+    deliver_options = {
+      api_key: app_store_connect_api_key_from_env,
+      app_identifier: APP_IDENTIFIER,
+      metadata_path: METADATA_PATH,
+      screenshots_path: nil,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      submit_for_review: false,
+      run_precheck_before_submit: false,
+      precheck_include_in_app_purchases: false,
+      force: true
+    }
+
+    review_information = app_review_information_from_env
+    deliver_options[:app_review_information] = review_information if review_information
+
+    deliver(deliver_options)
+  end
+
+  desc "Upload App Store screenshots only, without binary or review submission"
+  lane :uppic do
+    deliver(
+      api_key: app_store_connect_api_key_from_env,
+      app_identifier: APP_IDENTIFIER,
+      metadata_path: METADATA_PATH,
+      screenshots_path: SCREENSHOTS_PATH,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      overwrite_screenshots: true,
+      submit_for_review: false,
+      run_precheck_before_submit: false,
+      precheck_include_in_app_purchases: false,
+      force: true
+    )
+  end
+end
